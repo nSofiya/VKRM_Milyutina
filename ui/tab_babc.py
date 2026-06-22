@@ -132,9 +132,34 @@ class BABC_Tab(QWidget):
         # КНОПКА ЗАПУСКА
         # =====================================================
 
-        self.run_button = QPushButton("Запустить расчет")
+        self.parameters_button = QPushButton("Параметры метода")
 
-        main_layout.addWidget(self.run_button)
+        self.run_button = QPushButton("Запустить расчет")
+        self.run_button.setStyleSheet("""
+            QPushButton {
+                font-size: 14px;
+                font-weight: bold;
+                background-color: #1976D2;
+                color: white;
+                border-radius: 5px;
+                padding: 6px;
+            }
+
+            QPushButton:hover {
+                background-color: #1565C0;
+            }
+
+            QPushButton:pressed {
+                background-color: #0D47A1;
+            }
+        """)
+
+        buttons_layout = QHBoxLayout()
+
+        buttons_layout.addWidget(self.parameters_button)
+        buttons_layout.addWidget(self.run_button)
+
+        main_layout.addLayout(buttons_layout)
 
         # =====================================================
         # БЛОК РЕЗУЛЬТАТОВ
@@ -157,7 +182,7 @@ class BABC_Tab(QWidget):
         self.point_field.setReadOnly(True)
 
         results_layout.addRow(
-            "Значение в точке минимума:",
+            "Точка минимума:",
             self.point_field
         )
 
@@ -184,6 +209,10 @@ class BABC_Tab(QWidget):
         )
 
         self.run_button.clicked.connect(self.run_algorithm)
+
+        self.parameters_button.clicked.connect(
+            self.show_parameters
+        )
 
         # Загрузка стартовых изображений
         self.update_function_image()
@@ -239,6 +268,19 @@ class BABC_Tab(QWidget):
     # =========================================================
     # ЗАПУСК АЛГОРИТМА
     # =========================================================
+
+    def show_parameters(self):
+        QMessageBox.information(
+            self,
+            "Параметры метода BABC",
+            "Максимальное число итераций K = 200\n\n"
+            "Число пчёл-разведчиков s = 50\n\n"
+            "Число отбираемых наилучших значений b = 20\n\n"
+            "Число пчёл, посылаемых в наилучшие области B = 10\n\n"
+            "Число пчёл, посылаемых в перспективные области P = 10\n\n"
+            "Параметр области локального поиска delta = 0.85\n\n"
+            "Пороговое значение расстояния между пчёлами threshold = 0.0001"
+        )
 
     def run_algorithm(self):
         # =========================

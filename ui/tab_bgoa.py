@@ -131,9 +131,34 @@ class BGOA_Tab(QWidget):
         # КНОПКА ЗАПУСКА
         # =====================================================
 
-        self.run_button = QPushButton("Запустить расчет")
+        self.parameters_button = QPushButton("Параметры метода")
 
-        main_layout.addWidget(self.run_button)
+        self.run_button = QPushButton("Запустить расчет")
+        self.run_button.setStyleSheet("""
+                    QPushButton {
+                        font-size: 14px;
+                        font-weight: bold;
+                        background-color: #1976D2;
+                        color: white;
+                        border-radius: 5px;
+                        padding: 6px;
+                    }
+
+                    QPushButton:hover {
+                        background-color: #1565C0;
+                    }
+
+                    QPushButton:pressed {
+                        background-color: #0D47A1;
+                    }
+                """)
+
+        buttons_layout = QHBoxLayout()
+
+        buttons_layout.addWidget(self.parameters_button)
+        buttons_layout.addWidget(self.run_button)
+
+        main_layout.addLayout(buttons_layout)
 
         # =====================================================
         # БЛОК РЕЗУЛЬТАТОВ
@@ -156,7 +181,7 @@ class BGOA_Tab(QWidget):
         self.point_field.setReadOnly(True)
 
         results_layout.addRow(
-            "Значение в точке минимума:",
+            "Точка минимума:",
             self.point_field
         )
 
@@ -183,6 +208,10 @@ class BGOA_Tab(QWidget):
         )
 
         self.run_button.clicked.connect(self.run_algorithm)
+
+        self.parameters_button.clicked.connect(
+            self.show_parameters
+        )
 
         # Загрузка стартовых изображений
         self.update_function_image()
@@ -238,6 +267,18 @@ class BGOA_Tab(QWidget):
     # =========================================================
     # ЗАПУСК АЛГОРИТМА
     # =========================================================
+
+    def show_parameters(self):
+        QMessageBox.information(
+            self,
+            "Параметры метода BGOA",
+            "Максимальное число итераций K = 200\n\n"
+            "Количество особей s = 50\n\n"
+            "Минимальное значение коэффициента сходимости c_min = 0.00001\n\n"
+            "Максимальное значение коэффициента сходимости c_max = 1\n\n"
+            "Коэффициент масштаба f = 0.5\n\n"
+            "Коэффициент дальности взаимодействия l = 1.5\n\n"
+        )
 
     def run_algorithm(self):
         # =========================
